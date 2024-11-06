@@ -18,7 +18,7 @@ class Config:
 
 
 app = Flask(__name__)
-app.config.from_object(Class) # Load configuration from the Config class
+app.config.from_object(Config) # Load configuration from the Config class
 
 babel =Babel(app) # Initialize Babel with the Flask app
 
