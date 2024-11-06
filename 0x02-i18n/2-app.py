@@ -18,9 +18,9 @@ class Config:
 
 
 app = Flask(__name__)
-app.config.from_object(Config) # Load configuration from the Config class
+app.config.from_object(Config)  # Load configuration from the Config class
 
-babel =Babel(app) # Initialize Babel with the Flask app
+babel = Babel(app)  # Initialize Babel with the Flask app
 
 
 @babel.localeselector
@@ -30,6 +30,7 @@ def get_locale():
     supported languages.
     """
     return request.accept_languages.best_match(app.config['LANGUAGES'])
+
 
 @app.route('/')
 def index():
