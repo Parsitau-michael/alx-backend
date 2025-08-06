@@ -16,6 +16,7 @@ class MRUCache(BaseCaching):
         Initialize the MRUCache instance.
         """
         super().__init__()
+        self.recent = []
 
     def put(self, key, item):
         """
@@ -26,14 +27,17 @@ class MRUCache(BaseCaching):
         if key is None or item is None:
             return
 
-        if key in self.cache_data:
-            self.cache_data.pop(key)
+        if key in self.recent:
+            self.recent.remove(key)
 
+        if len(self.recent) >= BaseCaching.MAX_ITEMS:
+            discard = self.recent[-1]
+            self.recent.remove(discard)
+            self.cache_data.pop(discard)
+            print("DISCARD: {}".format(discard))
+
+        self.recent.append(key)
         self.cache_data[key] = item
-
-        if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-            discarded_key, _ = self.cache_data.popitem()
-            print("DISCARD: {}".format(discarded_key))
 
     def get(self, key):
         """
@@ -48,6 +52,7 @@ class MRUCache(BaseCaching):
         """
         if key is None or key not in self.cache_data:
             return None
-        item = self.cache_data.pop(key)
-        self.cache_data[key] = item
-        return item
+
+        self.recent.remove(key)
+        self.recent.append(key)
+        return self.cache_data[key]
