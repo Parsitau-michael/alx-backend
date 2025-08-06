@@ -41,24 +41,26 @@ class Server:
 
     def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
         """Obtain hyper index"""
-        dataset = self.dataset()
+        dataset = self.indexed_dataset()
 
-        if index is None:
+        if index is not None:
+            assert 0 <= index < len(self.dataset())
+        else:
             index = 0
 
-        assert isinstance(index, int) and 0 <= index < len(dataset)
-        data = dataset[index: index + page_size]
-        next_index = index + page_size
+        data = []
+        curr_index = index
 
-        while next_index < len(dataset) and dataset[next_index] is None:
-            next_index += 1
+        while len(data) < page_size and curr_index < len(self.dataset()):
+            if curr_index in dataset:
+                data.append(dataset.get(curr_index))
+            curr_index += 1
 
-        if next_index >= len(dataset):
-            next_index = None
-
+        next_index = curr_index
+         
         return {
                 'index': index,
-                'next_index': next_index,
-                'page_size': len(data),
-                'data': data
+                'data': data,
+                'page_size': page_size,
+                'next_index': next_index
         }
