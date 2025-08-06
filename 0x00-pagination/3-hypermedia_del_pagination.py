@@ -57,7 +57,7 @@ class Server:
             curr_index += 1
 
         next_index = curr_index
-         
+
         return {
                 'index': index,
                 'data': data,
