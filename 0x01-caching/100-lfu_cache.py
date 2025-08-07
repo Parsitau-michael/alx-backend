@@ -3,6 +3,7 @@
 
 from base_caching import BaseCaching
 
+
 class LFUCache(BaseCaching):
     """LFU Cache class definition"""
     def __init__(self):
